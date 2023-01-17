@@ -1,0 +1,36 @@
+version: '3.8'
+services:
+  backend:
+    build: ./backend
+    depends_on:
+      - db
+    container_name: backend
+    ports:
+      - '4000:4000'
+    volumes:
+      - ./backend:/app
+    env_file:
+      - .env
+  db:
+    container_name: db
+    image: postgres
+    ports:
+      - '5433:${DB_PORT}'
+    volumes:
+      - data:/data/db
+    environment:
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+  frontend:
+    build: ./frontend
+    depends_on:
+      - backend
+    container_name: frontend
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./frontend:/app
+    stdin_open: true
+    tty: true
+volumes:
+  data: {}
