@@ -14,9 +14,8 @@ const client = new Client({
   port: parseInt(process.env.DB_PORT ?? '5432')
 });
 
-console.log(process.env);
-
 void client.connect().then(() => {
+  // eslint-disable-next-line n/handle-callback-err
   client.query('SELECT NOW()', (err, res) => {
     console.log(res.rows);
     void client.end();
