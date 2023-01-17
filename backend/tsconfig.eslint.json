@@ -1,4 +1,3 @@
-// Special typescript project file, used by eslint only.
 {
   "extends": "./tsconfig.json",
 }
