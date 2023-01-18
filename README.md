@@ -8,5 +8,7 @@ A fun little project where the goal is to create a web application that allows p
 
 ## Setup
 - Create a `.env` file in the project root. Copy the contents of `.env.example` into your new `.env` file
-- `docker compose up`
+- `docker compose up --build`
+- `docker exec -it backend sh` (see if we can consolidate these)
+- `npm run migrate up`
 - Navigate to http://localhost:3000/ to view the frontend client (note: it takes a few minutes to get started)

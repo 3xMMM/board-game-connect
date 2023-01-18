@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 // import * as dotenv from 'dotenv';
 import { Client } from 'pg';
+import session from 'express-session';
 
 // dotenv.config();
 
@@ -13,6 +14,12 @@ const client = new Client({
   password: process.env.DB_PASSWORD,
   port: parseInt(process.env.DB_PORT ?? '5432')
 });
+
+// app.use(
+//   session({
+//
+//   })
+// );
 
 void client.connect().then(() => {
   // eslint-disable-next-line n/handle-callback-err
