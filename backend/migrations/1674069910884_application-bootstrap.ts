@@ -1,10 +1,10 @@
 /* eslint-disable camelcase */
 
-import { MigrationBuilder } from 'node-pg-migrate';
+import { MigrationBuilder, ColumnDefinitions } from 'node-pg-migrate';
 
-exports.shorthands = undefined;
+export const shorthands: ColumnDefinitions | undefined = undefined;
 
-exports.up = (pgm: MigrationBuilder) => {
+export async function up (pgm: MigrationBuilder): Promise<void> {
   pgm.sql('CREATE TABLE "session" (\n' +
     '  "sid" varchar NOT NULL COLLATE "default",\n' +
     '  "sess" json NOT NULL,\n' +
@@ -15,8 +15,8 @@ exports.up = (pgm: MigrationBuilder) => {
     'ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;\n' +
     '\n' +
     'CREATE INDEX "IDX_session_expire" ON "session" ("expire");');
-};
+}
 
-exports.down = (pgm: MigrationBuilder) => {
+export async function down (pgm: MigrationBuilder): Promise<void> {
   pgm.dropTable('session');
-};
+}

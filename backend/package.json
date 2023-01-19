@@ -13,9 +13,19 @@
   },
   "author": "",
   "license": "MIT",
+  "nodemonConfig": {
+    "ignore": [
+      "**/migrations/**",
+      "**/dist/**",
+      ".eslintrc.js"
+    ],
+    "delay": 2500
+  },
   "dependencies": {
+    "@types/bcrypt": "^5.0.0",
     "@types/connect-pg-simple": "^7.0.0",
     "@types/express-session": "^1.17.5",
+    "bcrypt": "^5.1.0",
     "connect-pg-simple": "^8.0.0",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",

@@ -1,7 +1,7 @@
 module.exports = {
   env: {
     browser: true,
-    es2021: true
+    es2021: true,
   },
   extends: [
     "react-app",
@@ -9,13 +9,23 @@ module.exports = {
   overrides: [
   ],
   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module'
+    ecmaVersion: "latest",
+    sourceType: "module",
   },
   plugins: [
-    'react'
+    'react',
   ],
   rules: {
-    semi: [2, 'always']
-  }
+    "semi": ["error", "always"],
+    "@typescript-eslint/semi": ["error", "always"],
+    "comma-dangle": ["error", {
+      "arrays": "always-multiline",
+      "objects": "always-multiline",
+    }],
+    "@typescript-eslint/comma-dangle": ["error", {
+      "arrays": "always-multiline",
+      "objects": "always-multiline",
+    }],
+    "@typescript-eslint/strict-boolean-expressions": "off",
+  },
 };
