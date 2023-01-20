@@ -30,7 +30,9 @@ services:
       - '3000:3000'
     volumes:
       - ./frontend:/app
-    stdin_open: true
-    tty: true
+#    stdin_open: true
+#    tty: true
+    environment:
+      WATCHPACK_POLLING: true
 volumes:
   data: {}

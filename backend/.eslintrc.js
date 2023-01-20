@@ -21,5 +21,7 @@ module.exports = {
       "objects": "always-multiline",
     }],
     "@typescript-eslint/strict-boolean-expressions": "off",
+    "object-curly-spacing": ["error", "always"],
+    "@typescript-eslint/object-curly-spacing": ["error", "always"],
   },
 };

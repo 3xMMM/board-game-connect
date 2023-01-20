@@ -4,26 +4,26 @@ import logo from './logo.svg';
 import './App.css';
 
 function App() {
-  return (
-    <ChakraProvider>
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
+    return (
+        <ChakraProvider>
+            <div className="App">
+                <header className="App-header">
+                    <img src={logo} className="App-logo" alt="logo" />
+                    <p>
             Edit <code>src/App.tsx</code> and save to reload.
-          </p>
-          <a
-              className="App-link"
-              href="https://reactjs.org"
-              target="_blank"
-              rel="noopener noreferrer"
-          >
-            Learn React and try things out
-          </a>
-        </header>
-      </div>
-    </ChakraProvider>
-  );
+                    </p>
+                    <a
+                        className="App-link"
+                        href="https://reactjs.org"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+            Learn React and try things out. Oh snap. man
+                    </a>
+                </header>
+            </div>
+        </ChakraProvider>
+    );
 }
 
 export default App;
