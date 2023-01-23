@@ -5,7 +5,7 @@ import { MigrationBuilder, ColumnDefinitions } from 'node-pg-migrate';
 export const shorthands: ColumnDefinitions | undefined = undefined;
 
 export async function up (pgm: MigrationBuilder): Promise<void> {
-  pgm.sql('CREATE TABLE "session" (\n' +
+    pgm.sql('CREATE TABLE "session" (\n' +
     '  "sid" varchar NOT NULL COLLATE "default",\n' +
     '  "sess" json NOT NULL,\n' +
     '  "expire" timestamp(6) NOT NULL\n' +
@@ -18,5 +18,5 @@ export async function up (pgm: MigrationBuilder): Promise<void> {
 }
 
 export async function down (pgm: MigrationBuilder): Promise<void> {
-  pgm.dropTable('session');
+    pgm.dropTable('session');
 }

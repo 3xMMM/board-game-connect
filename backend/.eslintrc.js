@@ -10,6 +10,8 @@ module.exports = {
     project: ["./tsconfig.eslint.json"],
   },
   rules: {
+    "indent": ["error", 4],
+    "@typescript-eslint/indent": ["error", 4],
     "semi": ["error", "always"],
     "@typescript-eslint/semi": ["error", "always"],
     "comma-dangle": ["error", {
