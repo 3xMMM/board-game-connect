@@ -50,11 +50,13 @@ void (async () => {
         return;
     }
 
-    bcrypt.hash(response.password, 10, (err, encrypted) => {
+    bcrypt.hash(response.password, 10, async (err, encrypted) => {
         if (err) {
             console.error(err);
             return;
         }
+
+        response.password = encrypted;
 
         const client = new Client({
             host: process.env.DB_HOST,
@@ -64,17 +66,22 @@ void (async () => {
             port: parseInt(process.env.DB_PORT ?? '5432'),
         });
 
+        await client.connect();
+
         const query = {
-            text: 'INSERT INTO admin_users(firstName, lastName, email, username, password) ' +
+            text: 'INSERT INTO admin_users(first_name, last_name, email, username, password) ' +
                 'VALUES($1, $2, $3, $4, $5)',
             values: Object.values(response),
         };
 
         client.query(query, (err, res) => {
             if (err) {
+                console.error('❌  User was not added. See below error:');
                 console.log(err.stack);
+                process.exit(1);
             } else {
-                console.log(res.rows[0]);
+                console.log('✔️  User was added successfully');
+                process.exit();
             }
         });
     });

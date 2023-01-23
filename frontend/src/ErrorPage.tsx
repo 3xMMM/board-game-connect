@@ -1,8 +1,8 @@
 import { useRouteError } from "react-router-dom";
 
 interface ReactError {
-  statusText: string
-  message: string
+    statusText: string 
+    message: string
 }
 
 export default function ErrorPage() {

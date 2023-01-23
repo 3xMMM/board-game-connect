@@ -10,11 +10,11 @@ export async function up (pgm: MigrationBuilder): Promise<void> {
             unique: true,
             primaryKey: true,
         },
-        firstName: {
+        first_name: {
             type: 'TEXT',
             notNull: true,
         },
-        lastName: {
+        last_name: {
             type: 'TEXT',
             notNull: true,
         },
@@ -30,7 +30,7 @@ export async function up (pgm: MigrationBuilder): Promise<void> {
             type: 'TEXT',
             notNull: true,
         },
-        lastLogin: {
+        last_login: {
             type: 'DATE',
         },
     });

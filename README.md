@@ -12,3 +12,10 @@ A fun little project where the goal is to create a web application that allows p
 - `docker exec -it backend sh` (see if we can consolidate these)
 - `npm run migrate up`
 - Navigate to http://localhost:3000/ to view the frontend client (note: it takes a few minutes to get started)
+
+## Run commands in a container
+- `docker exec -it backend sh` (you can replace 'backend' with anything)
+
+## eslint setup
+- In the root project directory:
+    - `cd frontend && npm install && cd ../backend && npm install && cd ..`
