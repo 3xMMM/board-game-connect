@@ -9,6 +9,7 @@ import AdminLoginPage from "./admin/AdminLoginPage";
 import RequireAdminAuth from "./auth/RequireAdminAuth";
 import { baseTheme, ChakraProvider, extendTheme, withDefaultColorScheme } from "@chakra-ui/react";
 import AdminDashboard from "./admin/AdminDashboard";
+import AdminAuthProvider from "./auth/AdminAuthProvider";
 
 const theme = extendTheme(
     {
@@ -28,13 +29,13 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage/>,
     },
     {
-        path: '/admin/login',
-        element: <AdminLoginPage/>,
-    },
-    {
         path: '/admin',
         element: <RequireAdminAuth/>,
         children: [
+            {
+                path: 'login',
+                element: <AdminLoginPage/>,
+            },
             {
                 path: 'dashboard',
                 element: <AdminDashboard/>,

@@ -1,4 +1,4 @@
-import { useAdminAuth } from "../auth/AdminAuthProvider";
+import { useAdminAuth } from "../auth/AdminAuthContext";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@chakra-ui/react";
 

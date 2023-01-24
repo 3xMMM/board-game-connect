@@ -5,6 +5,7 @@ import session from 'express-session';
 import createSessionStore from 'connect-pg-simple';
 import bcrypt from 'bcrypt';
 import cors from 'cors';
+import { AdminUser } from './api';
 
 // Add values to Express Session's SessionData
 declare module 'express-session' {
@@ -83,16 +84,6 @@ app.get('/', (req, res) => {
     res.send('You need to log in');
 });
 
-interface AdminUser {
-    id: number
-    first_name: string
-    last_name: string
-    email: string
-    username: string
-    password: string
-    last_login: string
-}
-
 interface LoginRequest {
     username: string
     password: string
@@ -130,7 +121,14 @@ app.post('/api/admin/login', express.urlencoded({ extended: false }), (request, 
                         next(err);
                         return;
                     }
-                    response.status(200).send('OK');
+                    response.status(200).send({
+                        id: firstRow.id,
+                        first_name: firstRow.first_name,
+                        last_name: firstRow.last_name,
+                        username: firstRow.username,
+                        email: firstRow.email,
+                        last_login: firstRow.last_login,
+                    });
                 });
             });
         } else {

@@ -11,13 +11,14 @@ import {
 } from "@chakra-ui/react";
 import InputPassword from "../components/InputPassword";
 import { FormEvent, useState } from "react";
-import { useLocation, redirect } from "react-router-dom";
-import { useAdminAuth } from "../auth/AdminAuthProvider";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useAdminAuth } from "../auth/AdminAuthContext";
 
 export default function AdminLoginPage() {
     const location = useLocation();
     const auth = useAdminAuth();
-    const from = location.state?.from?.pathname || '/';
+    const navigate = useNavigate();
+    const from = location.state?.from?.pathname || '/admin/dashboard';
 
     const [inputs, setInputs] = useState({
         username: '',
@@ -32,7 +33,7 @@ export default function AdminLoginPage() {
         setIsError(false);
         try {
             auth.login(inputs.username, inputs.password, () => {
-                redirect(from);
+                navigate(from, { replace: true });
             });
         } catch (e) {
             setIsError(true);
