@@ -8,7 +8,7 @@ export default function AdminDashboard() {
 
     const handleLogout = () => {
         auth.logout(() => {
-            navigate('/');
+            navigate('/admin/login');
         });
     }; 
 

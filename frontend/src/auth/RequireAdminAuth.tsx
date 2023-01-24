@@ -17,7 +17,7 @@ export default function RequireAdminAuth() {
                 },
             });
         }
-    }, [user, location, navigate]);
+    }, [user]);
 
     return (
         <AdminAuthProvider>
