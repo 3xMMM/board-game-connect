@@ -121,7 +121,7 @@ app.post('/api/admin/login', express.urlencoded({ extended: false }), (request, 
                 request.session.userId = firstRow.id;
                 request.session.username = firstRow.username;
 
-                void pool.query('UPDATE admin_users SET last_login = current_timestamp');
+                void pool.query('UPDATE admin_users SET last_login = current_timestamp WHERE id = $1', [firstRow.id]);
 
                 // save the session before redirection to ensure page
                 // load does not happen before session is saved
