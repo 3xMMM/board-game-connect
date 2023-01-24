@@ -1,28 +1,41 @@
-import { Button, Container, FormControl, FormLabel, Heading, Input, StackDivider, VStack } from "@chakra-ui/react";
+import {
+    Button,
+    Container,
+    FormControl,
+    FormLabel,
+    Heading,
+    Input,
+    StackDivider,
+    Text,
+    VStack
+} from "@chakra-ui/react";
 import InputPassword from "../components/InputPassword";
 import { FormEvent, useState } from "react";
+import { useLocation, redirect } from "react-router-dom";
+import { useAdminAuth } from "../auth/AdminAuthProvider";
 
-export default function AdminLogin() {
-    const url = `${process.env.REACT_APP_API_URL}/api/admin/login`;
+export default function AdminLoginPage() {
+    const location = useLocation();
+    const auth = useAdminAuth();
+    const from = location.state?.from?.pathname || '/';
+
     const [inputs, setInputs] = useState({
         username: '',
         password: '',
     });
-    const handleChange = (e: { target: { name: any; value: any; }; }) => setInputs(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
+    const [isError, setIsError] = useState(false);
 
+    const handleChange = (e: { target: { name: any; value: any; }; }) => setInputs(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
 
     async function handleFormSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(inputs),
-        });
-
-        if (response.status === 200) {
-
+        setIsError(false);
+        try {
+            auth.login(inputs.username, inputs.password, () => {
+                redirect(from);
+            });
+        } catch (e) {
+            setIsError(true);
         }
     }
 
@@ -47,6 +60,9 @@ export default function AdminLogin() {
                     </FormControl>
                     <StackDivider/>
                     <Button type='submit' width='full' mt='8'>Login</Button>
+                    {isError &&
+                        <Text fontSize='md' color='red-600'>Could not login with the provided credentials. Please double-check your credentials and try again.</Text>
+                    }
                 </VStack>
             </form>
         </Container>

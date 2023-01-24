@@ -5,8 +5,10 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import App from './App';
 import ErrorPage from "./ErrorPage";
-import AdminLogin from "./admin/AdminLogin";
+import AdminLoginPage from "./admin/AdminLoginPage";
+import RequireAdminAuth from "./auth/RequireAdminAuth";
 import { baseTheme, ChakraProvider, extendTheme, withDefaultColorScheme } from "@chakra-ui/react";
+import AdminDashboard from "./admin/AdminDashboard";
 
 const theme = extendTheme(
     {
@@ -27,7 +29,17 @@ const router = createBrowserRouter([
     },
     {
         path: '/admin/login',
-        element: <AdminLogin/>,
+        element: <AdminLoginPage/>,
+    },
+    {
+        path: '/admin',
+        element: <RequireAdminAuth/>,
+        children: [
+            {
+                path: 'dashboard',
+                element: <AdminDashboard/>,
+            },
+        ],
     },
 ]);
 
