@@ -36,5 +36,6 @@ services:
 #    tty: true
     environment:
       WATCHPACK_POLLING: true
+      REACT_APP_API_URL: http://localhost:4000 # Note: You need to prefix env vars with "REACT_APP_" to pass them to CRA
 volumes:
   data: {}

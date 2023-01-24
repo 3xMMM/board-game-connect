@@ -31,7 +31,7 @@ export async function up (pgm: MigrationBuilder): Promise<void> {
             notNull: true,
         },
         last_login: {
-            type: 'DATE',
+            type: 'TIMESTAMP WITH TIME ZONE',
         },
     });
 }

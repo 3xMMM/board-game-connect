@@ -4,11 +4,13 @@ import { Pool } from 'pg';
 import session from 'express-session';
 import createSessionStore from 'connect-pg-simple';
 import bcrypt from 'bcrypt';
+import cors from 'cors';
 
 // Add values to Express Session's SessionData
 declare module 'express-session' {
     interface SessionData {
-        userId: boolean
+        userId: number | null
+        username: string
     }
 }
 
@@ -44,6 +46,13 @@ app.use(
     })
 );
 
+app.use(express.json());
+
+app.use(cors({
+    origin: 'http://localhost:3000',
+    optionsSuccessStatus: 200,
+}));
+
 // TODO A test. Will remove later
 pool.query('SELECT NOW()', (err, res) => {
     if (err) {
@@ -74,24 +83,63 @@ app.get('/', (req, res) => {
     res.send('You need to log in');
 });
 
-app.get('/login', express.urlencoded({ extended: false }), (req, res, next) => {
-    // login logic to validate req.body.user and req.body.pass
-    // would be implemented here. for this example any combo works
+interface AdminUser {
+    id: number
+    first_name: string
+    last_name: string
+    email: string
+    username: string
+    password: string
+    last_login: string
+}
 
-    // regenerate the session, which is good practice to help
-    // guard against forms of session fixation
-    req.session.regenerate(function (err) {
-        if (err) next(err);
+interface LoginRequest {
+    username: string
+    password: string
+}
 
-        // store user information in session, typically a user id
-        req.session.userId = true;
+app.post('/api/admin/login', express.urlencoded({ extended: false }), (request, response, next) => {
+    const requestBody: LoginRequest = request.body;
+    console.log(requestBody);
+    response.contentType('application/json');
+    const query = {
+        text: 'SELECT * FROM admin_users WHERE username = $1',
+        values: [requestBody.username],
+    };
 
-        // save the session before redirection to ensure page
-        // load does not happen before session is saved
-        req.session.save(function (err) {
-            if (err) { next(err); return; }
-            res.redirect('/');
-        });
+    pool.query(query).then(async queryResults => {
+        const firstRow: AdminUser = queryResults.rows[0];
+        const passwordMatch = await bcrypt.compare(requestBody.password, firstRow.password);
+
+        // regenerate the session, which is good practice to help
+        // guard against forms of session fixation
+        if (passwordMatch) {
+            request.session.regenerate(function (err) {
+                if (err) next(err);
+
+                // store user information in session, typically a user id
+                request.session.userId = firstRow.id;
+                request.session.username = firstRow.username;
+
+                void pool.query('UPDATE admin_users SET last_login = current_timestamp');
+
+                // save the session before redirection to ensure page
+                // load does not happen before session is saved
+                request.session.save(function (err) {
+                    if (err) {
+                        next(err);
+                        return;
+                    }
+                    response.status(200).send('OK');
+                });
+            });
+        } else {
+            // May want to log this
+            response.status(400).send('Could not login. Please try again.');
+        }
+    }).catch(e => {
+        console.error(e);
+        response.status(500).send('Server Error');
     });
 });
 
@@ -99,7 +147,8 @@ app.get('/logout', (req, res, next) => {
     // clear the user from the session object and save.
     // this will ensure that re-using the old session id
     // does not have a logged-in user
-    req.session.userId = false;
+    req.session.userId = null;
+    req.session.username = '';
     req.session.save((err) => {
         if (err) next(err);
 
