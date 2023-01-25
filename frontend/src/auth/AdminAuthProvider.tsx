@@ -7,7 +7,7 @@ export default function AdminAuthProvider({ children }: { children: ReactNode })
     const [user, setUser] = useState<AdminUser | null>(null);
 
     const login = async (username: string, password: string, callback: (wasError: boolean) => void) => {
-        const response = await ApiFetch.post<AdminUser>('/api/admin/login', { username, password });
+        const response = await ApiFetch.post<AdminUser>('/api/admin/authentication/login', { username, password });
         let error = true;
         if (response) {
             setUser(response);
