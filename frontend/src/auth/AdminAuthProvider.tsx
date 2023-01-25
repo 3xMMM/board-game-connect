@@ -6,15 +6,14 @@ import { AdminAuthContext } from "./AdminAuthContext";
 export default function AdminAuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<AdminUser | null>(null);
 
-    const login = async (username: string, password: string, callback: VoidFunction) => {
+    const login = async (username: string, password: string, callback: (wasError: boolean) => void) => {
         const response = await ApiFetch.post<AdminUser>('/api/admin/login', { username, password });
+        let error = true;
         if (response) {
             setUser(response);
-        } else {
-            setUser(null);
+            error = false;
         }
-
-        callback();
+        callback(error);
     };
 
     const logout = async (callback: VoidFunction) => {

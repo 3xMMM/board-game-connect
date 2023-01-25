@@ -31,10 +31,9 @@ export default function AdminLoginPage() {
     async function handleFormSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
         setIsError(false);
-        auth.login(inputs.username, inputs.password, () => {
-            if (auth.user === null) {
-                setIsError(true);
-            } else {
+        auth.login(inputs.username, inputs.password, (wasError) => {
+            setIsError(wasError);
+            if (!wasError) {
                 navigate(from, { replace: true });
             }
         });

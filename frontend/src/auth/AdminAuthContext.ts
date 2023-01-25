@@ -3,7 +3,7 @@ import { createContext, useContext } from "react";
 
 interface AdminAuthContextType {
     user: AdminUser | null
-    login: (username: string, password: string, callback: VoidFunction) => void
+    login: (username: string, password: string, callback: (wasError: boolean) => void) => void
     logout: (callback: VoidFunction) => void
 }
 
