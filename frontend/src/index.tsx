@@ -9,12 +9,12 @@ import AdminLoginPage from "./admin/AdminLoginPage";
 import RequireAdminAuth from "./auth/RequireAdminAuth";
 import { baseTheme, ChakraProvider, extendTheme, withDefaultColorScheme } from "@chakra-ui/react";
 import AdminDashboard from "./admin/AdminDashboard";
-import AdminAuthProvider from "./auth/AdminAuthProvider";
 
 const theme = extendTheme(
     {
         colors: {
             primary: baseTheme.colors.purple,
+            red: baseTheme.colors.red,
         },
     }, 
     withDefaultColorScheme({

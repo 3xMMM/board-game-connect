@@ -31,13 +31,13 @@ export default function AdminLoginPage() {
     async function handleFormSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
         setIsError(false);
-        try {
-            auth.login(inputs.username, inputs.password, () => {
+        auth.login(inputs.username, inputs.password, () => {
+            if (auth.user === null) {
+                setIsError(true);
+            } else {
                 navigate(from, { replace: true });
-            });
-        } catch (e) {
-            setIsError(true);
-        }
+            }
+        });
     }
 
     return (
@@ -62,7 +62,7 @@ export default function AdminLoginPage() {
                     <StackDivider/>
                     <Button type='submit' width='full' mt='8'>Login</Button>
                     {isError &&
-                        <Text fontSize='md' color='red-600'>Could not login with the provided credentials. Please double-check your credentials and try again.</Text>
+                        <Text fontSize='md' color='red.600'>Could not login with the provided credentials. Please double-check your credentials and try again.</Text>
                     }
                 </VStack>
             </form>
