@@ -32,8 +32,11 @@ export const AdminAuthenticationController = {
     },
 
     logout: (request: Request, response: Response) => {
-        AppSession.clear(request.session);
-        response.redirect('/admin/login');
+        AppSession.clear(request.session, () => {
+            response.status(200).send({
+                message: 'Logged out successfully',
+            });
+        });
     },
 
     /**

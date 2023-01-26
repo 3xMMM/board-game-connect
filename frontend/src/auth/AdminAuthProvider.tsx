@@ -3,9 +3,11 @@ import ApiFetch from "../services/ApiFetch";
 import { AdminUser } from "../spa";
 import { AdminAuthContext } from "./AdminAuthContext";
 import Cookie from '../services/Cookie';
+import { useNavigate } from 'react-router-dom';
 
 export default function AdminAuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<AdminUser | null>(null);
+    const navigate = useNavigate();
 
     const login = async (username: string, password: string, callback: (wasError: boolean) => void) => {
         const response = await ApiFetch.post<AdminUser>('/api/admin/authentication/login', { username, password });
@@ -18,11 +20,11 @@ export default function AdminAuthProvider({ children }: { children: ReactNode })
         callback(error);
     };
 
-    const logout = async (callback: VoidFunction) => {
-        await ApiFetch.post('/api/admin/logout');
-        setUser(null);
+    const logout = async () => {
+        await ApiFetch.post('/api/admin/authentication/logout');
         Cookie.deleteCookie('loggedIn');
-        callback();
+        setUser(null);
+        navigate('/admin/login', { replace: true });
     };
 
     const value = { user, setUser, login, logout };

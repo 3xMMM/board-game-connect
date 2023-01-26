@@ -5,7 +5,7 @@ interface AdminAuthContextType {
     user: AdminUser | null
     setUser: (user: AdminUser) => void
     login: (username: string, password: string, callback: (wasError: boolean) => void) => void
-    logout: (callback: VoidFunction) => void
+    logout: () => void
 }
 
 export const AdminAuthContext = createContext<AdminAuthContextType>({

@@ -19,7 +19,7 @@ export const AppSession = {
      * Used when you want to log out a user/invalid their session. They will need to
      * log in again afterwards.
      */
-    clear: (session: AppSessionType): void => {
+    clear: (session: AppSessionType, callback: Function): void => {
         // clear the user from the session object and save.
         // this will ensure that re-using the old session id
         // does not have a logged-in user
@@ -32,6 +32,7 @@ export const AppSession = {
             // guard against forms of session fixation
             session.regenerate((err) => {
                 if (err) throw new Error('Could not regenerate session during clearing');
+                callback();
             });
         });
     },
