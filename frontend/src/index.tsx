@@ -9,6 +9,15 @@ import AdminLoginPage from "./admin/AdminLoginPage";
 import RequireAdminAuth from "./auth/RequireAdminAuth";
 import { baseTheme, ChakraProvider, extendTheme, withDefaultColorScheme } from "@chakra-ui/react";
 import AdminDashboard from "./admin/AdminDashboard";
+import Cookie from './services/Cookie';
+import ApiFetch from './services/ApiFetch';
+import { AdminUser } from './spa';
+import { useAdminAuth } from './auth/AdminAuthContext';
+
+interface SessionCheckResponse {
+    sessionIsValid: boolean,
+    user: AdminUser | {}
+}
 
 const theme = extendTheme(
     {
@@ -48,11 +57,9 @@ const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 );
 root.render(
-    <React.StrictMode>
-        <ChakraProvider theme={theme}>
-            <RouterProvider router={router}/>
-        </ChakraProvider>
-    </React.StrictMode>
+    <ChakraProvider theme={theme}>
+        <RouterProvider router={router}/>
+    </ChakraProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function
