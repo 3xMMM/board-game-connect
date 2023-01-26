@@ -10,6 +10,7 @@ module.exports = {
     project: ["./tsconfig.eslint.json"],
   },
   rules: {
+    "no-useless-return": "off",
     "indent": ["error", 4],
     "@typescript-eslint/indent": ["error", 4],
     "@typescript-eslint/explicit-function-return-type": "off",

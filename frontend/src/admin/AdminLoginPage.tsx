@@ -14,6 +14,13 @@ import { FormEvent, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAdminAuth } from "../auth/AdminAuthContext";
 import ApiFetch from "../services/ApiFetch";
+import { AdminUser } from '../spa';
+import Cookie from '../services/Cookie';
+
+interface SessionCheckResponse {
+    sessionIsValid: boolean,
+    user: AdminUser | {}
+}
 
 export default function AdminLoginPage() {
     const location = useLocation();
@@ -22,18 +29,23 @@ export default function AdminLoginPage() {
     const from = location.state?.from?.pathname || '/admin/dashboard';
 
     useEffect(() => {
-        // if (document.cookie.includes('appLoggedIn')) {
-        //     ApiFetch.get('/api/admin/authentication/session-check')
-        //         .then(response => {
-        //             if (response.sessionIsValid) {
-        //                 // TODO If the session is in place, then set the User here and redirect to the dashboard
-        //             }
-        //         });
-        // }
+        if (Cookie.getCookie('loggedIn')) {
+            ApiFetch.get<SessionCheckResponse>('/api/admin/authentication/session-check')
+                .then(response => {
+                    if (response && response.sessionIsValid && Object.keys(response.user).length > 0) {
+                        console.log('we have a session');
+                        auth.setUser(response.user as AdminUser);
+                        Cookie.setCookie('loggedIn', '1', 3);
+                    }
+                });
+        }
+    }, []);
+
+    useEffect(() => {
         if (auth.user !== null) {
             navigate('/admin/dashboard', { replace: true });
         }
-    });
+    }, [auth]);
 
     const [inputs, setInputs] = useState({
         username: '',

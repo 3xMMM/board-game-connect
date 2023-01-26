@@ -13,7 +13,7 @@ export const AdminAuthenticationController = {
     login: async (request: Request, response: Response) => {
         const requestBody: LoginRequest = request.body;
         try {
-            const user = await AdminUserRepository.getByUsername(requestBody.username) as AdminUser;
+            const user = await AdminUserRepository.getByUsername(requestBody.username);
             const passwordMatch = await bcrypt.compare(requestBody.password, user.password);
 
             if (!passwordMatch) {
@@ -30,9 +30,40 @@ export const AdminAuthenticationController = {
             });
         }
     },
+
     logout: (request: Request, response: Response) => {
         AppSession.clear(request.session);
         response.redirect('/admin/login');
+    },
+
+    /**
+     * Returns the logged-in User if they have a valid session. Else, returns nothing.
+     */
+    sessionCheck: (request: Request, response: Response) => {
+        const sessionIsValid = request.session.userId;
+        const userId = request.session.userId as number;
+
+        if (sessionIsValid) {
+            AdminUserRepository.getById(userId)
+                .then(result => {
+                    response.status(200).send({
+                        sessionIsValid,
+                        user: result,
+                    });
+                    return;
+                }).catch(e => {
+                    console.error(e);
+                    response.status(400).send({
+                        message: 'Could not check login status. Please try again.',
+                    });
+                    return;
+                });
+        } else {
+            response.status(200).send({
+                sessionIsValid,
+                user: {},
+            });
+        }
     },
 };
 
