@@ -1,59 +1,16 @@
-import express, { NextFunction, Request, Response } from 'express';
-import pool from './utils/pool';
-import session from 'express-session';
-import createSessionStore from 'connect-pg-simple';
-import cors from 'cors';
+import express from 'express';
 import routes from './routes';
+import AppMiddleware from './middleware/AppMiddleware';
 
 const app = express();
 const port = process.env.PORT ?? 4000;
 
-// Add values to Express Session's SessionData
-declare module 'express-session' {
-    interface SessionData {
-        userId: number | null
-        username: string
-    }
-}
-
-const SessionStore = createSessionStore(session);
-
-app.use(cors({
-    origin: 'http://localhost:3000',
-    optionsSuccessStatus: 200,
-}));
-
-app.use(
-    session({
-        store: new SessionStore({
-            pool,
-            tableName: 'session',
-        }),
-        secret: 'ABCD1234', // TODO will want this to be an .env or per-build value later
-        resave: false,
-        saveUninitialized: false,
-        cookie: {
-            maxAge: 14 * 24 * 60 * 60 * 1000, // 14 days
-            httpOnly: true,
-            secure: false, // TODO For localhost this will be false, but prod/remote will be true (requires https)
-        },
-    })
-);
-
+app.use(AppMiddleware.useCORS);
+app.use(AppMiddleware.useSession);
 app.use(express.json());
+app.use(AppMiddleware.contentTypeIsJSONByDefault);
 
-// Default Response content type will be JSON. Override if needed in controllers.
-app.use((request, response, next) => {
-    response.contentType('application/json');
-    next();
-});
-
-function isAuthenticated (req: Request, res: Response, next: NextFunction): void {
-    if (req.session.userId) next();
-    else next('route');
-}
-
-app.get('/', isAuthenticated, (req, res) => {
+app.get('/', AppMiddleware.requireUserSession, (req, res) => {
     res.send('Logged in');
 });
 

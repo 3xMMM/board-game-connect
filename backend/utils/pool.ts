@@ -1,6 +1,9 @@
 import { Pool } from 'pg';
 
-export const pool = new Pool({
+/**
+ * There will only ever be one instance of a Pool per connection.
+ */
+const pool = new Pool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     database: process.env.DB_NAME,
