@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import ApiFetch from "../services/ApiFetch";
 import { AdminUser } from "../spa";
 import { AdminAuthContext } from "./AdminAuthContext";
@@ -21,9 +21,9 @@ export default function AdminAuthProvider({ children }: { children: ReactNode })
     };
 
     const logout = async () => {
-        await ApiFetch.post('/api/admin/authentication/logout');
         Cookie.deleteCookie('loggedIn');
         setUser(null);
+        await ApiFetch.post('/api/admin/authentication/logout');
         navigate('/admin/login', { replace: true });
     };
 

@@ -3,15 +3,10 @@ import { Button } from "@chakra-ui/react";
 
 export default function AdminDashboard() {
     const auth = useAdminAuth();
-
-    const handleLogout = () => {
-        auth.logout();
-    }; 
-
     return (
         <div>
             <div>You're logged in!</div>
-            <Button onClick={handleLogout}>Logout</Button>
+            <Button onClick={auth.logout}>Logout</Button>
         </div>
     );
 }

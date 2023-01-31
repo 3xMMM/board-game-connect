@@ -33,7 +33,6 @@ export default function AdminLoginPage() {
             ApiFetch.get<SessionCheckResponse>('/api/admin/authentication/session-check')
                 .then(response => {
                     if (response && response.sessionIsValid && Object.keys(response.user).length > 0) {
-                        console.log('we have a session');
                         auth.setUser(response.user as AdminUser);
                         Cookie.setCookie('loggedIn', '1', 3);
                     }
