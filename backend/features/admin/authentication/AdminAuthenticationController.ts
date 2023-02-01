@@ -1,17 +1,16 @@
-import AdminUserRepository from '../../models/AdminUserRepository';
+import AdminUserRepository from '../user/AdminUserRepository';
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import AdminUser from '../../models/AdminUser';
-import AppSession from '../../utils/session';
+import AppSession from '../../../utils/session';
 
-interface LoginRequest {
+export interface AdminLoginRequest {
     username: string
     password: string
 }
 
 export const AdminAuthenticationController = {
     login: async (request: Request, response: Response) => {
-        const requestBody: LoginRequest = request.body;
+        const requestBody: AdminLoginRequest = request.body;
         try {
             const user = await AdminUserRepository.getByUsername(requestBody.username);
             const passwordMatch = await bcrypt.compare(requestBody.password, user.password);
@@ -22,10 +21,10 @@ export const AdminAuthenticationController = {
 
             AdminUserRepository.updateLastLogin(user);
             AppSession.regenerate(request.session, user.id, user.username);
-            response.status(200).send(user.toClientSafeJSON());
+            return response.status(200).send(user.toClientSafeJSON());
         } catch (e) {
             console.error(e);
-            response.status(400).send({
+            return response.status(400).send({
                 message: 'Could not login. Please try again.',
             });
         }
@@ -33,7 +32,7 @@ export const AdminAuthenticationController = {
 
     logout: (request: Request, response: Response) => {
         AppSession.clear(request.session, () => {
-            response.status(200).send({
+            return response.status(200).send({
                 message: 'Logged out successfully',
             });
         });
@@ -49,20 +48,18 @@ export const AdminAuthenticationController = {
         if (sessionIsValid) {
             AdminUserRepository.getById(userId)
                 .then(result => {
-                    response.status(200).send({
+                    return response.status(200).send({
                         sessionIsValid,
                         user: result,
                     });
-                    return;
                 }).catch(e => {
                     console.error(e);
-                    response.status(400).send({
+                    return response.status(400).send({
                         message: 'Could not check login status. Please try again.',
                     });
-                    return;
                 });
         } else {
-            response.status(200).send({
+            return response.status(200).send({
                 sessionIsValid,
                 user: {},
             });

@@ -1,5 +1,5 @@
 import express from 'express';
-import AdminAuthenticationController from '../../controllers/admin/AdminAuthenticationController';
+import AdminAuthenticationController from '../../features/admin/authentication/AdminAuthenticationController';
 
 const router = express.Router({ mergeParams: true });
 

@@ -1,4 +1,4 @@
-import pool from '../utils/pool';
+import pool from '../../../utils/pool';
 import AdminUser from './AdminUser';
 
 export const AdminUserRepository = {

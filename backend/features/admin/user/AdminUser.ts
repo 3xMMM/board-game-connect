@@ -1,3 +1,13 @@
+export interface AdminUserConstructorParams {
+    id: number
+    last_login: string
+    first_name: string
+    last_name: string
+    username: string
+    email: string
+    password: string
+}
+
 export default class AdminUser {
     private readonly _id: number;
     private _last_login: string;
@@ -7,7 +17,7 @@ export default class AdminUser {
     public email: string;
     public password: string;
 
-    constructor (adminUser: AdminUser) {
+    constructor (adminUser: AdminUserConstructorParams) {
         this._id = adminUser.id;
         this._last_login = adminUser.last_login;
         this.first_name = adminUser.first_name;
@@ -32,7 +42,7 @@ export default class AdminUser {
     /**
      * Returns a JSON object without sensitive fields (like passwords and secrets)
      */
-    public toClientSafeJSON (): Record<string, unknown> {
+    public toClientSafeJSON () {
         return {
             id: this.id,
             last_login: this.last_login,

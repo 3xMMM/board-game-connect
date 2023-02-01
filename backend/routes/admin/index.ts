@@ -1,8 +1,8 @@
 import express from 'express';
-import authenticationRoutes from './authentication.routes';
+import authenticationRouter from './authentication.router';
 
 const router = express.Router({ mergeParams: true });
 
-router.use('/authentication', authenticationRoutes);
+router.use('/authentication', authenticationRouter);
 
 export default router;
