@@ -1,6 +1,6 @@
 import { Session, SessionData } from 'express-session';
 
-type AppSessionType = Session & Partial<SessionData>;
+export type AppSessionType = Session & Partial<SessionData>;
 
 export const AppSession = {
     regenerate: (session: AppSessionType, userId: number, username: string): void => {
