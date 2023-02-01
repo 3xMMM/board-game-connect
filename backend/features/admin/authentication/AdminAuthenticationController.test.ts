@@ -2,12 +2,12 @@ import AdminAuthenticationController from './AdminAuthenticationController';
 import bcrypt from 'bcrypt';
 import AdminUser from '../user/AdminUser';
 import AdminUserRepository from '../user/AdminUserRepository';
-import AppSession from '../../../utils/session';
+import AppSession, { AppSessionType } from '../../../utils/session';
 import nodeMocksHttp from 'node-mocks-http';
 import SpyInstance = jest.SpyInstance;
 
-afterEach(() => {
-    jest.clearAllMocks();
+beforeAll(() => {
+    jest.spyOn(console, 'error').mockImplementation(); // hide expected error logs
 });
 
 describe('the login handler', () => {
@@ -20,10 +20,6 @@ describe('the login handler', () => {
         last_name: 'User',
         password: userRawPassword, // will be hashed in the setup function
         username: 'test.user',
-    });
-
-    afterEach(() => {
-        jest.clearAllMocks();
     });
 
     describe('a successful login', () => {
@@ -116,9 +112,52 @@ describe('the login handler', () => {
 });
 
 describe('the logout handler', () => {
-    // TODO
+    const setup = () => {
+        const request = nodeMocksHttp.createRequest();
+        const response = nodeMocksHttp.createResponse();
+        const appSessionClear = jest.spyOn(AppSession, 'clear').mockImplementation((session: AppSessionType, callback: Function): void => {
+            callback();
+        });
+
+        AdminAuthenticationController.logout(request, response);
+
+        return {
+            request,
+            response,
+            appSessionClear,
+        };
+    };
+
+    it('clears the session', () => {
+        const result = setup();
+        expect(result.appSessionClear).toHaveBeenCalled();
+    });
+    it('returns a 200 response', () => {
+        const result = setup();
+        expect(result.response.statusCode).toEqual(200);
+    });
 });
 
 describe('the session check handler', () => {
-    // TODO
+    describe('when a session is valid', () => {
+        describe('when a user can be associated with the session', () => {
+            it.todo('returns a 200 response');
+            describe('the response body', () => {
+                it.todo('has a `sessionIsValid` key with a value equal to the User\'s id');
+                it.todo('has a `user` key with a value of equal to the User\'s client-safe JSON object');
+            });
+        });
+        describe('when a user cannot be associated with the session', () => {
+            it.todo('throws an error');
+            it.todo('returns a 400 response');
+        });
+    });
+
+    describe('when a session is not valid', () => {
+        it.todo('returns a 200 response');
+        describe('the response body', () => {
+            it.todo('has a `sessionIsValid` key with a value of `null`');
+            it.todo('has a `user` key with a value of `{}');
+        });
+    });
 });
