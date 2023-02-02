@@ -18,6 +18,10 @@ A fun little project where the goal is to create a web application that allows p
 
 ## Docs for Libraries and Frameworks
 
+### Frontend
+Beyond React and its common ecosystem (React Router, Redux), the frontend container uses the following:
+- **Chakra UI** (a React UI library) https://chakra-ui.com/docs/components
+
 ### Backend
 Beyond Node and Express, the backend container uses the following:
 - **Node Postgres** (a Node interface for PostgresQL) https://node-postgres.com/
