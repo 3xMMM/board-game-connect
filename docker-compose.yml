@@ -9,13 +9,14 @@ services:
       - '4000:4000'
     volumes:
       - ./backend:/app
+      - /app/node_modules
     env_file:
       - .env
   db:
     container_name: db
     image: postgres
     ports:
-      - '5433:${DB_PORT}'
+      - '${DB_PORT}'
     volumes:
       - data:/data/db
     environment:
@@ -30,7 +31,11 @@ services:
       - '3000:3000'
     volumes:
       - ./frontend:/app
-    stdin_open: true
-    tty: true
+      - /app/node_modules
+#    stdin_open: true
+#    tty: true
+    environment:
+      WATCHPACK_POLLING: true
+      REACT_APP_API_URL: http://localhost:4000 # Note: You need to prefix env vars with "REACT_APP_" to pass them to CRA
 volumes:
   data: {}

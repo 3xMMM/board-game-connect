@@ -1,16 +1,65 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
+import App from './App';
+import ErrorPage from "./ErrorPage";
+import AdminLoginPage from "./admin/AdminLoginPage";
+import RequireAdminAuth from "./auth/RequireAdminAuth";
+import { baseTheme, ChakraProvider, extendTheme, withDefaultColorScheme } from "@chakra-ui/react";
+import AdminDashboard from "./admin/AdminDashboard";
+import Cookie from './services/Cookie';
+import ApiFetch from './services/ApiFetch';
+import { AdminUser } from './spa';
+import { useAdminAuth } from './auth/AdminAuthContext';
+
+interface SessionCheckResponse {
+    sessionIsValid: boolean,
+    user: AdminUser | {}
+}
+
+const theme = extendTheme(
+    {
+        colors: {
+            primary: baseTheme.colors.purple,
+            red: baseTheme.colors.red,
+        },
+    }, 
+    withDefaultColorScheme({
+        colorScheme: 'primary',
+    })
+);
+
+const router = createBrowserRouter([
+    {
+        path: '/',
+        element: <App/>,
+        errorElement: <ErrorPage/>,
+    },
+    {
+        path: '/admin',
+        element: <RequireAdminAuth/>,
+        children: [
+            {
+                path: 'login',
+                element: <AdminLoginPage/>,
+            },
+            {
+                path: 'dashboard',
+                element: <AdminDashboard/>,
+            },
+        ],
+    },
+]);
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+    document.getElementById('root') as HTMLElement
 );
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+    <ChakraProvider theme={theme}>
+        <RouterProvider router={router}/>
+    </ChakraProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function
