@@ -50,7 +50,7 @@ export const AdminAuthenticationController = {
                 .then(result => {
                     return response.status(200).send({
                         sessionIsValid,
-                        user: result,
+                        user: result.toClientSafeJSON(),
                     });
                 }).catch(e => {
                     console.error(e);

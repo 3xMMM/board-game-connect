@@ -5,4 +5,5 @@ export default {
     testPathIgnorePatterns: ['/node_modules/', '/dist'],
     clearMocks: true,
     restoreMocks: true,
+    collectCoverage: true,
 };

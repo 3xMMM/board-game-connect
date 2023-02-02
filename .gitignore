@@ -3,3 +3,5 @@
 .env
 **/migration-config.json
 **/dist
+**/coverage
+coverage
