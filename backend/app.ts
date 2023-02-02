@@ -21,15 +21,6 @@ app.get('/', (req, res) => {
 
 app.use('/api', routes);
 
-// app.get('/api/admin/authentication/session-check', (request, response, next) => {
-//     const sessionIsValid = request.session.userId !== null;
-//     response.contentType('application/json');
-//     response.status(200).send({
-//         sessionIsValid,
-//         // TODO Need to send the logged in user from here. Re-use the getter in the login
-//     });
-// });
-
 app.listen(port, () => {
     console.log(`Server running on port ${port}, http://localhost:${port}`);
 });
