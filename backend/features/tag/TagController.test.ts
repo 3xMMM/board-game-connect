@@ -3,7 +3,7 @@ import { TagController } from './TagController';
 import { TagRepository } from './TagRepository';
 import Tag from './Tag';
 
-beforeAll(() => {
+beforeEach(() => {
     jest.spyOn(console, 'error').mockImplementation(); // hide expected error logs
 });
 

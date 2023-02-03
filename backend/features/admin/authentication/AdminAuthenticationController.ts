@@ -41,12 +41,12 @@ export const AdminAuthenticationController = {
     /**
      * Returns the logged-in User if they have a valid session. Else, returns nothing.
      */
-    sessionCheck: (request: Request, response: Response) => {
+    sessionCheck: async (request: Request, response: Response) => {
         const sessionIsValid = request.session.userId;
         const userId = request.session.userId as number;
 
         if (sessionIsValid) {
-            AdminUserRepository.getById(userId)
+            return await AdminUserRepository.getById(userId)
                 .then(result => {
                     return response.status(200).send({
                         sessionIsValid,
@@ -55,7 +55,7 @@ export const AdminAuthenticationController = {
                 }).catch(e => {
                     console.error(e);
                     return response.status(400).send({
-                        message: 'Could not check login status. Please try again.',
+                        message: 'Could not check session status. Please try again.',
                     });
                 });
         } else {

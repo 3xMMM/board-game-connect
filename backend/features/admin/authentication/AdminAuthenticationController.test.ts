@@ -6,7 +6,7 @@ import AppSession, { AppSessionType } from '../../../utils/session';
 import nodeMocksHttp from 'node-mocks-http';
 import SpyInstance = jest.SpyInstance;
 
-beforeAll(() => {
+beforeEach(() => {
     jest.spyOn(console, 'error').mockImplementation(); // hide expected error logs
 });
 
@@ -148,7 +148,7 @@ describe('the logout handler', () => {
 describe('the session check handler', () => {
     describe('when a session is valid', () => {
         describe('when a user can be associated with the session', () => {
-            const setup = () => {
+            const setup = async () => {
                 const user = createTestUserWithPassword();
                 const request = nodeMocksHttp.createRequest({
                     session: {
@@ -158,8 +158,7 @@ describe('the session check handler', () => {
                 });
                 const response = nodeMocksHttp.createResponse();
                 const repositoryGetById = jest.spyOn(AdminUserRepository, 'getById').mockResolvedValue(user);
-
-                AdminAuthenticationController.sessionCheck(request, response);
+                await AdminAuthenticationController.sessionCheck(request, response);
 
                 return {
                     request,
@@ -169,32 +168,84 @@ describe('the session check handler', () => {
                 };
             };
 
-            it('returns a 200 response', () => {
-                expect(setup().response.statusCode).toEqual(200);
+            it('returns a 200 response', async () => {
+                const result = await setup();
+                expect(result.response.statusCode).toEqual(200);
             });
-            // TODO: Not sure why, but the response can't be read here. Will need to figure it out later.
-            describe.skip('the response body', () => {
-                it('has a `sessionIsValid` key with a value equal to the User\'s id', () => {
-                    const result = setup();
+
+            describe('the response body', () => {
+                it('has a `sessionIsValid` key with a value equal to the User\'s id', async () => {
+                    const result = await setup();
                     expect(result.response._getData().sessionIsValid).toBeTruthy();
                 });
-                it.skip('has a `user` key with a value of equal to the User\'s client-safe JSON object', () => {
-                    const result = setup();
+                it('has a `user` key with a value of equal to the User\'s client-safe JSON object', async () => {
+                    const result = await setup();
                     expect(result.response._getData().user).toEqual(result.user.toClientSafeJSON());
                 });
             });
         });
         describe('when a user cannot be associated with the session', () => {
-            it.todo('throws an error');
-            it.todo('returns a 400 response');
+            const setup = async () => {
+                const user = createTestUserWithPassword();
+                const request = nodeMocksHttp.createRequest({
+                    session: {
+                        userId: user.id,
+                        username: user.username,
+                    },
+                });
+                const response = nodeMocksHttp.createResponse();
+                const repositoryGetById = jest.spyOn(AdminUserRepository, 'getById').mockImplementation(async () => {
+                    return await new Promise(() => {
+                        throw new Error('User not found by ID');
+                    });
+                });
+                await AdminAuthenticationController.sessionCheck(request, response);
+
+                return {
+                    request,
+                    response,
+                    user,
+                    repositoryGetById,
+                };
+            };
+
+            it('returns a 400 response', async () => {
+                const result = await setup();
+                expect(result.response.statusCode).toEqual(400);
+            });
         });
     });
 
     describe('when a session is not valid', () => {
-        it.todo('returns a 200 response');
+        const setup = async () => {
+            const request = nodeMocksHttp.createRequest({
+                session: {
+                    userId: null,
+                    username: '',
+                },
+            });
+            const response = nodeMocksHttp.createResponse();
+            await AdminAuthenticationController.sessionCheck(request, response);
+
+            return {
+                request,
+                response,
+            };
+        };
+
+        it('returns a 200 response', async () => {
+            const result = await setup();
+            expect(result.response.statusCode).toEqual(200);
+        });
         describe('the response body', () => {
-            it.todo('has a `sessionIsValid` key with a value of `null`');
-            it.todo('has a `user` key with a value of `{}');
+            it('has a `sessionIsValid` key with a value of `null`', async () => {
+                const result = await setup();
+                expect(result.response._getData().sessionIsValid).toEqual(null);
+            });
+            it('has a `user` key with a value of `{}', async () => {
+                const result = await setup();
+                expect(result.response._getData().user).toEqual({});
+            });
         });
     });
 });

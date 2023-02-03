@@ -7,6 +7,8 @@ router.post('/login', (request, response) => {
     void AdminAuthenticationController.login(request, response);
 });
 router.post('/logout', AdminAuthenticationController.logout);
-router.get('/session-check', AdminAuthenticationController.sessionCheck);
+router.get('/session-check', (request, response) => {
+    void AdminAuthenticationController.sessionCheck(request, response);
+});
 
 export default router;

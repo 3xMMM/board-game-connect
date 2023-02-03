@@ -1,7 +1,7 @@
 import nodeMocksHttp from 'node-mocks-http';
 import { AppSession, AppSessionType } from './session';
 
-beforeAll(() => {
+beforeEach(() => {
     jest.spyOn(console, 'error').mockImplementation(); // hide expected error logs
 });
 

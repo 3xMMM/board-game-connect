@@ -6,4 +6,9 @@ export default {
     clearMocks: true,
     restoreMocks: true,
     collectCoverage: true,
+    collectCoverageFrom: [
+        'features/**/*.ts',
+        'utils/**/*.ts',
+        '!**/*Repository.ts',
+    ],
 };
