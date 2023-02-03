@@ -42,7 +42,7 @@ export default function AdminLoginPage() {
 
     useEffect(() => {
         if (auth.user !== null) {
-            navigate('/admin/dashboard', { replace: true });
+            navigate(from, { replace: true });
         }
     }, [auth]);
 

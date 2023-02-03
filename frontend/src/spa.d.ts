@@ -7,3 +7,7 @@ export interface AdminUser {
     password: string
     last_login: string
 }
+
+export interface Tag {
+    name: string,
+}

@@ -9,15 +9,7 @@ import AdminLoginPage from "./admin/AdminLoginPage";
 import RequireAdminAuth from "./auth/RequireAdminAuth";
 import { baseTheme, ChakraProvider, extendTheme, withDefaultColorScheme } from "@chakra-ui/react";
 import AdminDashboard from "./admin/AdminDashboard";
-import Cookie from './services/Cookie';
-import ApiFetch from './services/ApiFetch';
-import { AdminUser } from './spa';
-import { useAdminAuth } from './auth/AdminAuthContext';
-
-interface SessionCheckResponse {
-    sessionIsValid: boolean,
-    user: AdminUser | {}
-}
+import AdminTagsView from './admin/AdminTagsView';
 
 const theme = extendTheme(
     {
@@ -48,6 +40,10 @@ const router = createBrowserRouter([
             {
                 path: 'dashboard',
                 element: <AdminDashboard/>,
+            },
+            {
+                path: 'tags',
+                element: <AdminTagsView/>,
             },
         ],
     },
