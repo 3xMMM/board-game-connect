@@ -46,18 +46,18 @@ export const AdminAuthenticationController = {
         const userId = request.session.userId as number;
 
         if (sessionIsValid) {
-            return await AdminUserRepository.getById(userId)
-                .then(result => {
-                    return response.status(200).send({
-                        sessionIsValid,
-                        user: result.toClientSafeJSON(),
-                    });
-                }).catch(e => {
-                    console.error(e);
-                    return response.status(400).send({
-                        message: 'Could not check session status. Please try again.',
-                    });
+            try {
+                const user = await AdminUserRepository.getById(userId);
+                return response.status(200).send({
+                    sessionIsValid,
+                    user: user.toClientSafeJSON(),
                 });
+            } catch (e) {
+                console.error(e);
+                return response.status(400).send({
+                    message: 'Could not check session status. Please try again.',
+                });
+            }
         } else {
             return response.status(200).send({
                 sessionIsValid,
