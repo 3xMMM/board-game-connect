@@ -1,5 +1,6 @@
 import express from 'express';
 import admin from './admin';
+import tagsRouter from './tags.router';
 
 const router = express.Router({ mergeParams: true });
 
@@ -11,5 +12,6 @@ router.use((req, res, next) => {
 });
 
 router.use('/admin', admin);
+router.use('/tags', tagsRouter);
 
 export default router;

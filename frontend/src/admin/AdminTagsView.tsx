@@ -11,10 +11,16 @@ import {
 } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { Tag } from '../spa';
+import ApiFetch from '../services/ApiFetch';
 
 export default function AdminTagsView() {
     useEffect(() => {
         // TODO Add API fetch here
+        ApiFetch.get<Tag[]>('/api/tags').then(tags => {
+            if (tags) {
+                console.log(tags[0].name);
+            }
+        });
     }, []);
 
     return (

@@ -1,7 +1,7 @@
 const url = `${process.env.REACT_APP_API_URL}`;
 
 export const ApiFetch = {
-    get: async function <ResponseBody>(relativeUrl: string, additionalFetchOptions: RequestInit = {}) {
+    get: function <ResponseBody>(relativeUrl: string, additionalFetchOptions: RequestInit = {}) {
         return fetch(`${url}${relativeUrl}`, {
             method: 'GET',
             credentials: 'include',
@@ -16,7 +16,7 @@ export const ApiFetch = {
         });
     },
 
-    post: async function <ResponseBody>(relativeUrl: string, requestBody: Record<string, unknown> = {}, additionalFetchOptions: RequestInit = {}) {
+    post: function <ResponseBody>(relativeUrl: string, requestBody: Record<string, unknown> = {}, additionalFetchOptions: RequestInit = {}) {
         return fetch(`${url}${relativeUrl}`, {
             method: 'POST',
             headers: {

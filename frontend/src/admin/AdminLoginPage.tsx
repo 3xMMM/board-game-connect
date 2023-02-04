@@ -10,41 +10,15 @@ import {
     VStack
 } from "@chakra-ui/react";
 import InputPassword from "../components/InputPassword";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAdminAuth } from "../auth/AdminAuthContext";
-import ApiFetch from "../services/ApiFetch";
-import { AdminUser } from '../spa';
-import Cookie from '../services/Cookie';
-
-interface SessionCheckResponse {
-    sessionIsValid: boolean,
-    user: AdminUser | {}
-}
 
 export default function AdminLoginPage() {
     const location = useLocation();
     const auth = useAdminAuth();
     const navigate = useNavigate();
     const from = location.state?.from?.pathname || '/admin/dashboard';
-
-    useEffect(() => {
-        if (Cookie.getCookie('loggedIn')) {
-            ApiFetch.get<SessionCheckResponse>('/api/admin/authentication/session-check')
-                .then(response => {
-                    if (response && response.sessionIsValid && Object.keys(response.user).length > 0) {
-                        auth.setUser(response.user as AdminUser);
-                        Cookie.setCookie('loggedIn', '1', 3);
-                    }
-                });
-        }
-    }, []);
-
-    useEffect(() => {
-        if (auth.user !== null) {
-            navigate(from, { replace: true });
-        }
-    }, [auth]);
 
     const [inputs, setInputs] = useState({
         username: '',

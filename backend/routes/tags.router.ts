@@ -1,5 +1,5 @@
 import express from 'express';
-import { TagController } from '../../features/tag/TagController';
+import { TagController } from '../features/tag/TagController';
 
 const router = express.Router({ mergeParams: true });
 
