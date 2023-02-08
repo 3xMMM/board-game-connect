@@ -16,7 +16,7 @@ services:
     container_name: db
     image: postgres
     ports:
-      - '${DB_PORT}'
+      - '${DB_PORT}:${DB_PORT}'
     volumes:
       - data:/data/db
     environment:

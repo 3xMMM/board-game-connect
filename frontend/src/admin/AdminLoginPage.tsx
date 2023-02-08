@@ -18,7 +18,8 @@ export default function AdminLoginPage() {
     const location = useLocation();
     const auth = useAdminAuth();
     const navigate = useNavigate();
-    const from = location.state?.from?.pathname || '/admin/dashboard';
+    const fromLocationRaw = location.state?.from?.pathname;
+    const from = (fromLocationRaw && fromLocationRaw !== '/admin/login') ? fromLocationRaw : '/admin/dashboard';
 
     const [inputs, setInputs] = useState({
         username: '',
