@@ -5,6 +5,7 @@ import AdminAuthProvider from "./AdminAuthProvider";
 import Cookie from '../services/Cookie';
 import ApiFetch from '../services/ApiFetch';
 import { AdminUser } from '../spa';
+import AdminNavbar from '../components/AdminNavbar';
 
 interface SessionCheckResponse {
     sessionIsValid: boolean,
@@ -50,7 +51,7 @@ export default function RequireAdminAuth() {
 
     return (
         <AdminAuthProvider>
-            <Outlet/>
+            <AdminNavbar/>
         </AdminAuthProvider>
     );
 }
