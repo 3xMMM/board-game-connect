@@ -1,6 +1,16 @@
 # board-game-connect
 A fun little project where the goal is to create a web application that allows people to rent and purchase board games. This is just for learning and not intended for real world usage.
 
+## Tech Stack Description
+MERN/PERN stack with containerization via Docker.
+- Docker
+- Node (Express)
+- PostgreSQL (pg, node-pg-migrate)
+- React (Create React App, React Router, Redux, React Hook Form)
+- Chakra UI
+- Jest (Testing Library)
+- TypeScript
+
 ## Prerequisites
 - Docker (see https://docs.docker.com/get-docker/)
 - Node 18+ (see https://nodejs.org/en/)

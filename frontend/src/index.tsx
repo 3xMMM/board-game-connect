@@ -9,7 +9,7 @@ import AdminLoginPage from "./admin/AdminLoginPage";
 import RequireAdminAuth from "./auth/RequireAdminAuth";
 import { baseTheme, ChakraProvider, extendTheme, withDefaultColorScheme } from "@chakra-ui/react";
 import AdminDashboard from "./admin/AdminDashboard";
-import AdminTagsView from './admin/AdminTagsView';
+import AdminTagsView from './admin/tags/AdminTagsView';
 
 const theme = extendTheme(
     {

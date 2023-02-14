@@ -6,14 +6,18 @@ import {
     Tr,
     Th,
     Td,
-    TableContainer, Heading, Container, Button, Flex, Divider
+    TableContainer, Heading, Container, Button, Flex, Divider, useDisclosure
 } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
-import { Tag } from '../spa';
-import ApiFetch from '../services/ApiFetch';
+import { useEffect, useRef, useState } from 'react';
+import { Tag } from '../../spa';
+import ApiFetch from '../../services/ApiFetch';
+import AdminTagAddModal from './AdminTagAddModal';
 
 export default function AdminTagsView() {
     let [tags, setTags] = useState<Tag[]>([]);
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const addTagButtonRef = useRef(null);
+
     useEffect(() => {
         ApiFetch.get<Tag[]>('/api/tags').then(tags => {
             if (tags) {
@@ -30,7 +34,8 @@ export default function AdminTagsView() {
                 <Divider/>
                 <Flex justifyContent='space-between' alignItems='center'>
                     <Text display='inline-flex'><strong><em>{tags.length} tag(s)</em></strong></Text>
-                    <Button my='4'>Add Tag</Button>
+                    <Button ref={addTagButtonRef} my='4' onClick={onOpen}>Add Tag</Button>
+                    <AdminTagAddModal isOpen={isOpen} onClose={onClose} finalFocusRef={addTagButtonRef}/>
                 </Flex>
                 <TableContainer>
                     <Table variant='striped' colorScheme='primary' size='sm'>
