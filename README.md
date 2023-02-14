@@ -2,14 +2,16 @@
 A fun little project where the goal is to create a web application that allows people to rent and purchase board games. This is just for learning and not intended for real world usage.
 
 ## Tech Stack Description
-MERN/PERN stack with containerization via Docker.
-- Docker
-- Node (Express)
-- PostgreSQL (pg, node-pg-migrate)
-- React (Create React App, React Router, Redux, React Hook Form)
-- Chakra UI
-- Jest (Testing Library)
-- TypeScript
+MERN/PERN stack with containerization via Docker. A React SPA interacts with a Node/Express RESTful API. A PostgreQL database is used to persist data.
+
+- Containerization: **Docker**
+- Backend: **Node (Express)**
+- Database: **PostgreSQL (pg/node-postgres, node-pg-migrate)**
+- Frontend: **React (Create React App, React Router, Redux, React Hook Form)**
+- UI Library: **Chakra UI**
+- Test Runner: **Jest (Testing Library)**
+- Validation: **Joi**
+- Core: **TypeScript**
 
 ## Prerequisites
 - Docker (see https://docs.docker.com/get-docker/)

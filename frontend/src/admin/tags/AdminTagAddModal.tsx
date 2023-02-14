@@ -8,8 +8,10 @@ import {
     ModalCloseButton, Button,
     FormControl, FormLabel, Textarea, FormHelperText, Highlight, FormErrorMessage
 } from '@chakra-ui/react';
+import { Tag } from '../../spa';
 import { RefObject } from 'react';
 import { useForm } from 'react-hook-form';
+import ApiFetch from '../../services/ApiFetch';
 
 interface FocusableElement {
     focus(options?: FocusOptions): void;
@@ -19,6 +21,7 @@ export interface AdminTagAddModalProps {
     isOpen: boolean
     onClose: () => void
     finalFocusRef: RefObject<FocusableElement>
+    getTags: () => void
 }
 
 interface FormData {
@@ -30,10 +33,21 @@ export default function AdminTagAddModal(props: AdminTagAddModalProps) {
         register,
         handleSubmit,
         formState: { errors },
+        setValue,
+        setError,
     } = useForm<FormData>();
 
     const handleFormSubmit = (data: FormData) => {
-        console.log(data);
+        ApiFetch.post<Tag[]>('/api/tags', data)
+            .then(() => {
+                setValue('tagsToAdd', '');
+                props.onClose();
+                props.getTags();
+            })
+            .catch(e => {
+                // TODO deal with error 400 and 500
+                setError('tagsToAdd', e);
+            });
     };
 
     return(

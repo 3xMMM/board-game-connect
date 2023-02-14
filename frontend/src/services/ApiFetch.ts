@@ -16,7 +16,7 @@ export const ApiFetch = {
         });
     },
 
-    post: function <ResponseBody>(relativeUrl: string, requestBody: Record<string, unknown> = {}, additionalFetchOptions: RequestInit = {}) {
+    post: function <ResponseBody>(relativeUrl: string, requestBody: unknown = {}, additionalFetchOptions: RequestInit = {}) {
         return fetch(`${url}${relativeUrl}`, {
             method: 'POST',
             headers: {

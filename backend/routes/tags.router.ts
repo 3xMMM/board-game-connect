@@ -7,4 +7,8 @@ router.get('/', (request, response) => {
     void TagController.getAll(request, response);
 });
 
+router.post('/', (request, response) => {
+    void TagController.postMany(request, response);
+});
+
 export default router;

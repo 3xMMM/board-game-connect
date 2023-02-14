@@ -18,12 +18,16 @@ export default function AdminTagsView() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const addTagButtonRef = useRef(null);
 
-    useEffect(() => {
+    const getTags = () => {
         ApiFetch.get<Tag[]>('/api/tags').then(tags => {
             if (tags) {
                 setTags(tags);
             }
         });
+    };
+
+    useEffect(() => {
+        getTags();
     }, []);
 
     return (
@@ -35,7 +39,7 @@ export default function AdminTagsView() {
                 <Flex justifyContent='space-between' alignItems='center'>
                     <Text display='inline-flex'><strong><em>{tags.length} tag(s)</em></strong></Text>
                     <Button ref={addTagButtonRef} my='4' onClick={onOpen}>Add Tag</Button>
-                    <AdminTagAddModal isOpen={isOpen} onClose={onClose} finalFocusRef={addTagButtonRef}/>
+                    <AdminTagAddModal isOpen={isOpen} onClose={onClose} finalFocusRef={addTagButtonRef} getTags={getTags}/>
                 </Flex>
                 <TableContainer>
                     <Table variant='striped' colorScheme='primary' size='sm'>
