@@ -59,9 +59,9 @@ describe('the postMany handler', () => {
             ['a,b,c', createTagsFromArray(['a', 'b', 'c'])],
             [' a , b , c ', createTagsFromArray(['a', 'b', 'c'])],
         ])('with an input of "%s"', (input, expected) => {
-            it('returns a 200 response', async () => {
+            it('returns a 201 response', async () => {
                 const result = await setup(input, expected);
-                expect(result.response.statusCode).toEqual(200);
+                expect(result.response.statusCode).toEqual(201);
             });
             it('returns a response body with all created tags', async () => {
                 const result = await setup(input, expected);

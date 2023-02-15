@@ -2,10 +2,6 @@ import { TagRepository } from './TagRepository';
 import { Request, Response } from 'express';
 import Joi from 'joi';
 
-interface PostgresError {
-    code: string
-}
-
 export interface TagPostManyRequest extends Request {
     body: {
         tagsToAdd: string // Comma-separated string
@@ -36,11 +32,15 @@ export const TagController = {
 
         try {
             const createdTags = await TagRepository.createMany(tagsAsArray);
-            return response.status(200).send(createdTags);
-        } catch (error) {
+            return response.status(201).send(createdTags);
+        } catch (e) {
             let message = 'Could not create Tags. Please try again later.';
-            if (error.code === '23505') {
-                message = 'You cannot have duplicate tags with the same name.';
+            if (e instanceof Error && e.message.includes('Duplicate Tag(s): ')) {
+                message = e.message;
+                console.error(message);
+                return response.status(409).send({
+                    message,
+                });
             }
             return response.status(500).send({
                 message,

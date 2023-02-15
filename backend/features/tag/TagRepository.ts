@@ -1,5 +1,6 @@
 import Tag from './Tag';
 import pool from '../../utils/pool';
+import { DatabaseError } from 'pg';
 
 export const TagRepository = {
     getAll: async (): Promise<Tag[]> => {
@@ -25,18 +26,30 @@ export const TagRepository = {
     },
     createMany: async (tags: string[]): Promise<Tag[]> => {
         const rows: Tag[] = [];
-        tags.forEach(tag => {
+        const duplicateTags = new Set<string>();
+
+        for (let i = 0; i < tags.length; i++) {
+            const tag = tags[i];
             const query = {
                 text: 'INSERT INTO tags VALUES ($1) RETURNING *',
                 values: [tag],
             };
-            pool.query<Tag>(query)
-                .then(queryResults => rows.push(queryResults.rows[0]))
-                .catch(e => {
-                    console.error(e);
+            try {
+                const queryResults = await pool.query<Tag>(query);
+                rows.push(queryResults.rows[0]);
+            } catch (e) {
+                if (e instanceof DatabaseError && e.code === '23505') {
+                    duplicateTags.add(tag);
+                } else {
                     throw e;
-                });
-        });
+                }
+            }
+        }
+
+        if (duplicateTags.size > 0) {
+            throw new Error(`Duplicate Tag(s): ${[...duplicateTags].map(tag => `${tag}`).join(', ')}`);
+        }
+
         return rows.map(row => new Tag(row));
     },
 };
