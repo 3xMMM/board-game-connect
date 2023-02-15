@@ -18,16 +18,15 @@ export default function AdminTagsView() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const addTagButtonRef = useRef(null);
 
-    const getTags = () => {
-        ApiFetch.get<Tag[]>('/api/tags').then(tags => {
-            if (tags) {
-                setTags(tags);
-            }
-        });
+    const getTags = async () => {
+        const tags = await ApiFetch.get<Tag[]>('/api/tags');
+        if (tags) {
+            setTags(tags);
+        }
     };
 
     useEffect(() => {
-        getTags();
+        void getTags();
     }, []);
 
     return (

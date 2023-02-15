@@ -21,7 +21,7 @@ export interface AdminTagAddModalProps {
     isOpen: boolean
     onClose: () => void
     finalFocusRef: RefObject<FocusableElement>
-    getTags: () => void
+    getTags: () => Promise<void>
 }
 
 interface FormData {
@@ -42,7 +42,7 @@ export default function AdminTagAddModal(props: AdminTagAddModalProps) {
             await ApiFetch.post<Tag[]>('/api/tags', data);
             setValue('tagsToAdd', '');
             props.onClose();
-            props.getTags();
+            void props.getTags();
         } catch (e) {
             if (e instanceof Error) {
                 setError('tagsToAdd', { type: 'custom', message: e.message });
