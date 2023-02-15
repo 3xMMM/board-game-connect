@@ -7,12 +7,15 @@ export const ApiFetch = {
             credentials: 'include',
             ...additionalFetchOptions,
         }).then(response => {
-            if (!response.ok) {
-                throw new Error(response.statusText);
-            }
-            return response.json() as Promise<ResponseBody>;
+            return response.json().then(json => {
+                if (!response.ok) {
+                    throw new Error(json.message);
+                }
+                return json as Promise<ResponseBody>;
+            });
         }).catch(e => {
             console.error(e);
+            throw e;
         });
     },
 
@@ -26,12 +29,15 @@ export const ApiFetch = {
             body: JSON.stringify(requestBody),
             ...additionalFetchOptions,
         }).then(response => {
-            if (!response.ok) {
-                throw new Error(response.statusText);
-            }
-            return response.json() as Promise<ResponseBody>;
+            return response.json().then(json => {
+                if (!response.ok) {
+                    throw new Error(json.message);
+                }
+                return json as Promise<ResponseBody>;
+            });
         }).catch(e => {
             console.error(e);
+            throw e;
         });
     },
 };

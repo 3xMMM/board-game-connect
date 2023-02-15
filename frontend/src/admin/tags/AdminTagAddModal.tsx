@@ -45,8 +45,7 @@ export default function AdminTagAddModal(props: AdminTagAddModalProps) {
                 props.getTags();
             })
             .catch(e => {
-                // TODO deal with error 400 and 500
-                setError('tagsToAdd', e);
+                setError('tagsToAdd', { type: 'custom', message: e.message });
             });
     };
 
@@ -61,8 +60,8 @@ export default function AdminTagAddModal(props: AdminTagAddModalProps) {
                         <FormControl isInvalid={!!errors.tagsToAdd}>
                             <FormLabel>Tag(s) to Add</FormLabel>
                             <Textarea {...register('tagsToAdd', { required: true })}></Textarea>
-                            <FormErrorMessage>This field is required.</FormErrorMessage>
-                            <FormHelperText>Tip: You can add multiple tags by separating them with a comma (any whitespace between commas will be trimmed).</FormHelperText>
+                            <FormErrorMessage>{errors.tagsToAdd?.message}</FormErrorMessage>
+                            <FormHelperText>Note: <em>Tags must be unique.</em> You can add multiple tags by separating them with a comma (any whitespace between commas will be trimmed).</FormHelperText>
                         </FormControl>
                     </ModalBody>
                     <ModalFooter>
