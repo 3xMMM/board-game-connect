@@ -6,7 +6,7 @@ import {
     ModalFooter,
     ModalBody,
     ModalCloseButton, Button,
-    FormControl, FormLabel, Textarea, FormHelperText, Highlight, FormErrorMessage
+    FormControl, FormLabel, Textarea, FormHelperText, FormErrorMessage
 } from '@chakra-ui/react';
 import { Tag } from '../../spa';
 import { RefObject } from 'react';
@@ -37,16 +37,17 @@ export default function AdminTagAddModal(props: AdminTagAddModalProps) {
         setError,
     } = useForm<FormData>();
 
-    const handleFormSubmit = (data: FormData) => {
-        ApiFetch.post<Tag[]>('/api/tags', data)
-            .then(() => {
-                setValue('tagsToAdd', '');
-                props.onClose();
-                props.getTags();
-            })
-            .catch(e => {
+    const handleFormSubmit = async (data: FormData) => {
+        try {
+            await ApiFetch.post<Tag[]>('/api/tags', data);
+            setValue('tagsToAdd', '');
+            props.onClose();
+            props.getTags();
+        } catch (e) {
+            if (e instanceof Error) {
                 setError('tagsToAdd', { type: 'custom', message: e.message });
-            });
+            }
+        }
     };
 
     return(

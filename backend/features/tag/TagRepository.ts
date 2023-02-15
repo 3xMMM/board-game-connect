@@ -43,10 +43,6 @@ export const TagRepository = {
             } catch (e) {
                 if (e instanceof DatabaseError && e.code === '23505') {
                     duplicateTags.add(tag);
-                } else {
-                    await client.query('ROLLBACK');
-                    client.release();
-                    throw e;
                 }
             }
         }

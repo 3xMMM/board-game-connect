@@ -29,8 +29,9 @@ export default function RequireAdminAuth() {
         // Require the User to login if they aren't logged in. The Admin Login page is the only Admin page that can be accessed without authentication.
         if (adminAuth.user === null) {
             if (Cookie.getCookie('loggedIn')) {
-                ApiFetch.get<SessionCheckResponse>('/api/admin/authentication/session-check')
-                    .then(response => {
+                (async () => {
+                    try {
+                        const response = await ApiFetch.get<SessionCheckResponse>('/api/admin/authentication/session-check');
                         if (response && response.sessionIsValid && Object.keys(response.user).length > 0) {
                             adminAuth.setUser(response.user as AdminUser);
                             Cookie.setCookie('loggedIn', '1', 3);
@@ -40,9 +41,10 @@ export default function RequireAdminAuth() {
                         } else {
                             navigateToLoginPage();
                         }
-                    }).catch(() => {
+                    } catch (e) {
                         navigateToLoginPage();
-                    });
+                    }
+                })();
             } else {
                 navigateToLoginPage();
             }
