@@ -25,6 +25,9 @@ export const TagRepository = {
         return new Tag(rows[0]);
     },
     createMany: async (tags: string[]): Promise<Tag[]> => {
+        const client = await pool.connect();
+        await client.query('BEGIN');
+
         const rows: Tag[] = [];
         const duplicateTags = new Set<string>();
 
@@ -35,20 +38,27 @@ export const TagRepository = {
                 values: [tag],
             };
             try {
-                const queryResults = await pool.query<Tag>(query);
+                const queryResults = await client.query<Tag>(query);
                 rows.push(queryResults.rows[0]);
             } catch (e) {
                 if (e instanceof DatabaseError && e.code === '23505') {
                     duplicateTags.add(tag);
                 } else {
+                    await client.query('ROLLBACK');
+                    client.release();
                     throw e;
                 }
             }
         }
 
         if (duplicateTags.size > 0) {
+            await client.query('ROLLBACK');
+            client.release();
             throw new Error(`Duplicate Tag(s): ${[...duplicateTags].map(tag => `${tag}`).join(', ')}`);
         }
+
+        await client.query('COMMIT');
+        client.release();
 
         return rows.map(row => new Tag(row));
     },
