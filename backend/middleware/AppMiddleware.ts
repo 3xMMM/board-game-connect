@@ -48,8 +48,13 @@ export const AppMiddleware = {
     },
 
     requireUserSession: (request: Request, response: Response, next: NextFunction) => {
-        if (request.session.userId) next();
-        else next('route');
+        if (request.session.userId) {
+            next();
+        } else {
+            response.status(401).send({
+                message: 'Unauthorized',
+            });
+        }
     },
 };
 
