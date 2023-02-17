@@ -1,12 +1,17 @@
 import { Heading, HStack, Tab, TabList, Tabs } from '@chakra-ui/react';
-import { Link, Outlet, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { ReactNode } from 'react';
 
 interface AdminNavbarTabLink {
     label: string
     to: string
 }
 
-export default function AdminNavbar() {
+interface AdminNavbarProps {
+    children: ReactNode
+}
+
+export default function AdminNavbar(props: AdminNavbarProps) {
     const location = useLocation();
     const tabLinks: AdminNavbarTabLink[] = [
         { label: 'Dashboard', to: '/admin/dashboard' },
@@ -26,7 +31,7 @@ export default function AdminNavbar() {
                     }
                 </Tabs>
             </HStack>
-            <Outlet/>
+            { props.children }
         </div>
     );
 }

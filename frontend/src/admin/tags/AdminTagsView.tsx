@@ -8,25 +8,30 @@ import {
     Td,
     TableContainer, Heading, Container, Button, Flex, Divider, useDisclosure
 } from '@chakra-ui/react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { Tag } from '../../spa';
 import ApiFetch from '../../services/ApiFetch';
 import AdminTagAddModal from './AdminTagAddModal';
+import { useAppSelector, useAppDispatch } from '../../services/hooks';
+import { selectTags, setTags } from './tagsSlice';
 
 export default function AdminTagsView() {
-    let [tags, setTags] = useState<Tag[]>([]);
+    const tags = useAppSelector(selectTags);
+    const dispatch = useAppDispatch();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const addTagButtonRef = useRef(null);
 
     const getTags = async () => {
         const tags = await ApiFetch.get<Tag[]>('/api/tags');
         if (tags) {
-            setTags(tags);
+            dispatch(setTags(tags));
         }
     };
 
     useEffect(() => {
-        void getTags();
+        if (tags.length === 0) {
+            void getTags();
+        }
     }, []);
 
     return (

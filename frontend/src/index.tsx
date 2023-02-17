@@ -10,6 +10,8 @@ import RequireAdminAuth from "./auth/RequireAdminAuth";
 import { baseTheme, ChakraProvider, extendTheme, withDefaultColorScheme } from "@chakra-ui/react";
 import AdminDashboard from "./admin/AdminDashboard";
 import AdminTagsView from './admin/tags/AdminTagsView';
+import { Provider } from 'react-redux';
+import { store } from './services/store';
 
 const theme = extendTheme(
     {
@@ -53,9 +55,11 @@ const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 );
 root.render(
-    <ChakraProvider theme={theme}>
-        <RouterProvider router={router}/>
-    </ChakraProvider>
+    <Provider store={store}>
+        <ChakraProvider theme={theme}>
+            <RouterProvider router={router}/>
+        </ChakraProvider>
+    </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function

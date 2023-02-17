@@ -53,7 +53,9 @@ export default function RequireAdminAuth() {
 
     return (
         <AdminAuthProvider>
-            <AdminNavbar/>
+            <AdminNavbar>
+                <Outlet/>
+            </AdminNavbar>
         </AdminAuthProvider>
     );
 }
